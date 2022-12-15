@@ -6,3 +6,7 @@
   text-decoration: none;
   color: #fff;
 }
+
+.auth__login-link:hover {
+  opacity: 0.6;
+}

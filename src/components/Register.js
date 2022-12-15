@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function Register (props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const history = useHistory();
 
   function handleChange (evt) {
     evt.target.name === 'email' ? setEmail(evt.target.value) : setPassword(evt.target.value);
@@ -12,6 +13,7 @@ function Register (props) {
   function handleSubmit(evt) {
     evt.preventDefault()
     props.onRegister(email, password)
+    history.push('/sign-in')
   }
 
   return (

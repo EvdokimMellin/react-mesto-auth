@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserCurrent';
-import { register, login, tokenCheck, getToken } from '../auth.js';
+import { register, login, tokenCheck } from '../auth.js';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -14,6 +14,7 @@ import AddPlacePopup from './AddPlacePopup';
 import Login from './Login';
 import Register from './Register';
 import InfoTooltip from './InfoTooltip';
+import ProtectedRoute from './ProtectedRoute';
 
 
 
@@ -124,16 +125,10 @@ function App() {
 
   function handleRegister (email, password) {
     register(email, password)
-      .then(login(email, password))
       .then((res) => {
-        handleLogin (email, password)
-        // console.log(res);
-        // localStorage.setItem('token', res.token);
-        setLoginState(true);
-        setUserEmail(email);
+        console.log(res);
         setResponse('ok');
       })
-      // .then(login(email, password))
       .catch((err) => {
         console.log(err);
         setResponse('fail')
@@ -144,7 +139,7 @@ function App() {
     login(email, password)
       .then((res) => {
         console.log(res);
-        // localStorage.setItem('token', res.token);
+        localStorage.setItem('token', res.token);
         setLoginState(true);
         setUserEmail(email);
       })
@@ -152,6 +147,14 @@ function App() {
         console.log(err);
         setResponse('fail');
       });
+  }
+
+  function Content () {
+    return (<>
+      <Header page="main" email={userEmail} setLoginState={setLoginState} />
+      <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick.bind(this)} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} cards={cards} onCardDelete={handleCardDelete} onCardLike={handleCardLike}/>
+      <Footer/>
+    </>)
   }
 
   useEffect (() => {
@@ -176,15 +179,7 @@ function App() {
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <InfoTooltip res={response} onClose={closeAllPopups} />
         <Switch>
-          <Route exact path="/">
-            {loginState ?
-              <>
-                <Header page="main" email={userEmail} setLoginState={setLoginState} />
-                <Main onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick.bind(this)} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} cards={cards} onCardDelete={handleCardDelete} onCardLike={handleCardLike}/>
-                <Footer/>
-              </>
-              : <Redirect to="/sign-in" />}
-          </Route>
+          <ProtectedRoute exact path="/" loginState={loginState} component={Content} />
           <Route path="/sign-up">
             <Header buttonText="Войти" buttonLink="/sign-in" />
             <Register onRegister={handleRegister} />

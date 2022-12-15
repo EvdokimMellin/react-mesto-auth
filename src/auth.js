@@ -1,5 +1,3 @@
-import React from "react";
-
 const baseUrl = 'https://auth.nomoreparties.co';
 
 function checkResponse (res) {
@@ -21,26 +19,10 @@ export function register (email, password) {
       "email": email
     })
   })
-    // .then((res) => (checkResponse(res)))
-    .then(login(email, password))
+    .then((res) => (checkResponse(res)))
 }
 
 export function login (email, password) {
-  return fetch(`${baseUrl}/signin`, {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      "password": password,
-      "email": email
-    })
-  })
-    .then((res) => (checkResponse(res)))
-    .then((result) => {localStorage.setItem('token', result.token)})
-}
-
-export function getToken (password, email) {
   return fetch(`${baseUrl}/signin`, {
     method: 'POST',
     headers: {
