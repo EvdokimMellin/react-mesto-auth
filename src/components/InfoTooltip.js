@@ -9,23 +9,19 @@ export default function InfoTooltip (props) {
     }
   }
 
-  if (props.res === 'ok') {
-    return (
-      <div className="popup popup_type_image popup_opened" onClick={closeByOverlay}>
-        <div className="popup__info-container">
-          <button className="popup__close-button" onClick={props.onClose}></button>
-          <img alt="Успех" src={successImage} className="popup__info-image" />
-          <p className="popup__info-text">Вы успешно зарегистрировались!</p>
-        </div>
+  return (
+    <div className={`popup popup_type_image ${props.res && 'popup_opened'}`} onClick={closeByOverlay}>
+      <div className="popup__info-container">
+        <button className="popup__close-button" onClick={props.onClose}></button>
+        {props.res === 'ok'
+          ? <img alt="Успех" src={successImage} className="popup__info-image" />
+          : props.res === 'fail' && <img alt="Ошибка" src={failImage} className="popup__info-image" />
+        }
+        <p className="popup__info-text">{props.res === 'ok'
+          ? 'Вы успешно зарегистрировались!'
+          : props.res === 'fail' && 'Что-то пошло не так! Попробуйте ещё раз.'
+        }</p>
       </div>
-    )
-  } else if (props.res === 'fail') {return (
-      <div className="popup popup_type_image popup_opened" onClick={closeByOverlay}>
-        <div className="popup__info-container">
-          <button className="popup__close-button" onClick={props.onClose}></button>
-          <img alt="Ошибка" src={failImage} className="popup__info-image" />
-          <p className="popup__info-text">Что-то пошло не так! Попробуйте ещё раз.</p>
-        </div>
-      </div>
-  )}
+    </div>
+  )
 }

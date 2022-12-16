@@ -90,12 +90,6 @@ function App() {
     setResponse('');
   }
 
-  function closePopupByEscape (evt) {
-    if ((isAddPlacePopupOpen || isEditAvatarPopupOpen || isEditProfilePopupOpen || selectedCard) && evt.key === 'Escape') {
-      closeAllPopups();
-    }
-  }
-
   function handleUpdateUser ({name, about}) {
     api.updateUserInfo(name, about)
       .then((userData) => {
@@ -170,7 +164,7 @@ function App() {
   }, [])
 
   return (
-    <div className="page" onKeyDown={closePopupByEscape}>
+    <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
         <AddPlacePopup isOpened={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlace} />
         <EditProfilePopup isOpened={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AuthForm from './AuthForm';
 
 function Login (props) {
   const [email, setEmail] = useState('');
@@ -14,14 +15,7 @@ function Login (props) {
   }
 
   return (
-    <main className='auth'>
-      <h1 className='auth__title'>Вход</h1>
-      <form className='auth__form' onSubmit={handleSubmit}>
-        <input className='auth__input auth__input_type_email' name='email' placeholder='Email' type="email" autoComplete='on' onChange={handleChange}></input>
-        <input className='auth__input auth__input_type_password' name='password' placeholder='Пароль' type="password" autoComplete='on' onChange={handleChange}></input>
-        <button className='auth__button'>Войти</button>
-      </form>
-    </main>
+    <AuthForm title="Вход" handleSubmit={handleSubmit} handleChange={handleChange} buttonText="Войти" email={email} password={password} />
   )
 }
 

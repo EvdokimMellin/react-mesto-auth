@@ -1,39 +1,34 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
+import PopupWithForm from "./PopupWithForm";
 
 export default function AddPlacePopup (props) {
-    const nameInputRef = useRef();
-    const linkInputRef = useRef();
+    const [nameValue, setNameValue] = useState('');
+    const [linkValue, setLinkValue] = useState('');
 
-    function closeByOverlay (evt) {
-        if (evt.target.classList.contains('popup')) {
-          props.onClose();
-        }
+    function handleChange (evt) {
+      evt.target.name === 'addName'
+        ? setNameValue(evt.target.value)
+        : setLinkValue(evt.target.value);
     }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-
-        props.onAddPlace(nameInputRef.current.value, linkInputRef.current.value);
+    function handleSubmit(evt) {
+        evt.preventDefault();
+        props.onAddPlace(nameValue, linkValue);
     }
 
     useEffect(() => {
-        nameInputRef.current.value = '';
-        linkInputRef.current.value = '';
+        setNameValue('');
+        setLinkValue('');
     }, [props.isOpened])
 
     return(
-        <div className={`popup popup_type_add ${props.isOpened ? "popup_opened" : ""}`} onClick={closeByOverlay}>
-            <div className="popup__container">
-                <button className="popup__close-button" type="button" onClick={props.onClose}></button>
-                <p className="popup__title">Новое место</p>
-                <form className="popup__form" name="add-form" onSubmit={handleSubmit} >
-                    <input type="text" name="addName" id="add-name" className="popup__input popup__input_type_name" placeholder="Название" required minLength="2" maxLength="30" ref={nameInputRef} />
-                    <span className="popup__input-error add-name-error"></span>
-                    <input type="url" name="addDescription" id="add-description" className="popup__input popup__input_type_description" placeholder="Ссылка на картинку" required ref={linkInputRef}/>
-                    <span className="popup__input-error add-description-error"></span>
-                    <button className="popup__save-button">Создать</button>
-                </form>
-            </div>
-        </div>
+      <PopupWithForm name="add" onClose={props.onClose} title="Новое место" isOpened={props.isOpened} buttonText="Создать" handleSubmit={handleSubmit} children={
+        <>
+          <input type="text" name="addName" id="add-name" className="popup__input popup__input_type_name" placeholder="Название" required minLength="2" maxLength="30" onChange={handleChange} value={nameValue} />
+          <span className="popup__input-error add-name-error"></span>
+          <input type="url" name="addDescription" id="add-description" className="popup__input popup__input_type_description" placeholder="Ссылка на картинку" required onChange={handleChange} value={linkValue}/>
+          <span className="popup__input-error add-description-error"></span>
+        </>
+      } />
     )
 }

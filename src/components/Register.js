@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import AuthForm from './AuthForm';
 
 function Register (props) {
   const [email, setEmail] = useState('');
@@ -17,15 +18,7 @@ function Register (props) {
   }
 
   return (
-    <main className='auth'>
-      <h1 className='auth__title'>Регистрация</h1>
-      <form className='auth__form' onSubmit={handleSubmit}>
-        <input className='auth__input auth__input_type_email' placeholder='Email' name="email" type="email" autoComplete='off' onChange={handleChange}></input>
-        <input className='auth__input auth__input_type_password' placeholder='Пароль' name="password" type="password" autoComplete='off' onChange={handleChange}></input>
-        <button className='auth__button'>Зарегистрироваться</button>
-      </form>
-      <Link to="/sign-in" className='auth__login-link'>Уже зарегистрированы? Войти</Link>
-    </main>
+    <AuthForm title="Регистрация" handleSubmit={handleSubmit} handleChange={handleChange} buttonText="Зарегистрироваться" email={email} password={password} />
   )
 }
 
